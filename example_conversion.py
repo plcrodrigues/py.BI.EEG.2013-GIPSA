@@ -4,6 +4,8 @@ from sklearn.externals import joblib
 from braininvaders.dataset import bi2013a
 import numpy as np
 import mne
+import pandas as pd
+
 """
 =====================================
 Conversion to different data formats
@@ -32,26 +34,33 @@ session = 2
 run = 3 # we load only run 3 when choosing NonAdaptive + Training 
 raw = data['session_' + str(session)]['run_' + str(run)]
 
-# filter data and resample
+# filter data and resample from 512 Hz to 128 Hz
 fmin = 1
 fmax = 24
 raw.filter(fmin, fmax, verbose=False)
 raw.resample(sfreq=128, verbose=False)
+
+# saving filtered signals into a csv file
+path = './subject_' + str(subject) + '_session_' + str(session) + '_run_' + str(run) + '_signals'
+extension = '.csv'
+filename = path + extension
+d, t = raw[:, :]
+df = pd.DataFrame(d.T, columns=raw.ch_names)
+df.to_csv(filename)
 
 # detect the events and cut the signal into epochs
 events = mne.find_events(raw=raw, shortest_event=1, verbose=False)
 event_id = {'NonTarget': 33286, 'Target': 33285}
 epochs = mne.Epochs(raw, events, event_id, tmin=0.0, tmax=1.0, baseline=None, verbose=False)
 
-# get trials and labels
+# get epochs and their labels
 X = epochs.get_data()
 y = events[:, -1]
 y[y == 33286] = 0
 y[y == 33285] = 1
 
+# saving epochs into a pickle file
 path = './subject_' + str(subject) + '_session_' + str(session) + '_run_' + str(run) + '_epochs'
-
-# saving into a pickle file
 extension = '.pkl'
 filename = path + extension
 data = {}
@@ -59,13 +68,16 @@ data['epochs'] = X
 data['labels'] = y
 joblib.dump(data, filename)
 
-# saving into a mat file
+# saving epochs into a mat file
+path = './subject_' + str(subject) + '_session_' + str(session) + '_run_' + str(run) + '_epochs'
 extension = '.mat'
 filename = path + extension
 data = {}
 data['epochs'] = X
 data['labels'] = y
 savemat(filename, data)
+
+
 
 
 
