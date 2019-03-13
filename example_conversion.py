@@ -1,19 +1,16 @@
 
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import StratifiedKFold, cross_val_score
-from pyriemann.classification import MDM
-from pyriemann.estimation import XdawnCovariances
+from scipy.io import savemat
+from sklearn.externals import joblib
 from braininvaders.dataset import bi2013a
 import numpy as np
 import mne
 """
-=============================
-Classification of the trials
-=============================
+=====================================
+Conversion to different data formats
+=====================================
 
-This example shows how to extract the epochs from the dataset of a given
-subject and then classify them using Machine Learning techniques using
-Riemannian Geometry. 
+This scripts gives some options of how to extract the epochs from the .gdf
+files and then saving them into files with standard formats
 
 """
 # Authors: Pedro Rodrigues <pedro.rodrigues01@gmail.com>
@@ -29,8 +26,11 @@ dataset = bi2013a(NonAdaptive=True, Adaptive=False, Training=True, Online=False)
 # get the data from subject of interest
 subject = dataset.subject_list[0]
 data = dataset._get_single_subject_data(subject)
+
+# specify which session and run we want
 session = 2
-raw = data['session_' + str(session)]['run_3']
+run = 3 # we load only run 3 when choosing NonAdaptive + Training 
+raw = data['session_' + str(session)]['run_' + str(run)]
 
 # filter data and resample
 fmin = 1
@@ -49,12 +49,23 @@ y = events[:, -1]
 y[y == 33286] = 0
 y[y == 33285] = 1
 
-# cross validation
-skf = StratifiedKFold(n_splits=5)
-clf = make_pipeline(XdawnCovariances(estimator='lwf', classes=[1]), MDM())
-scr = cross_val_score(clf, X, y, cv=skf, scoring='roc_auc')
+path = './subject_' + str(subject) + '_session_' + str(session) + '_run_' + str(run) + '_epochs'
 
-# print results of classification
-print('subject', subject, 'session', session)
-print('mean AUC :', scr.mean())
+# saving into a pickle file
+extension = '.pkl'
+filename = path + extension
+data = {}
+data['epochs'] = X
+data['labels'] = y
+joblib.dump(data, filename)
+
+# saving into a mat file
+extension = '.mat'
+filename = path + extension
+data = {}
+data['epochs'] = X
+data['labels'] = y
+savemat(filename, data)
+
+
 

@@ -130,7 +130,8 @@ class bi2013a():
 
             raw_original = mne.io.read_raw_edf(file_path,
                                                montage='standard_1020',
-                                               preload=True, verbose=False)
+                                               preload=True, verbose=False,
+                                               stim_channel='auto')
 
             sessions[session_name][run_name] = raw_original
 
