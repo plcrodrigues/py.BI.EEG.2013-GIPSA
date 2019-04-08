@@ -1,4 +1,4 @@
-# BrainInvaders-2013a-Dataset
+# Brain Invaders 2013 Dataset
 
 Repository with basic scripts for using the Brain Invaders 2013a dataset developed at GIPSA-lab. The dataset files and their documentation are all available at 
 
