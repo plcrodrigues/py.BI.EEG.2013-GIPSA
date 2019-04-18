@@ -10,7 +10,7 @@ import zipfile
 import yaml
 from scipy.io import loadmat
 
-BI2013a_URL = 'https://zenodo.org/record/2644077/files/'
+BI2013a_URL = 'https://zenodo.org/record/2645882/files/'
 
 class BrainInvaders2013():
     '''
