@@ -3,7 +3,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from pyriemann.classification import MDM
 from pyriemann.estimation import XdawnCovariances
-from braininvaders.dataset import bi2013a
+from braininvaders.dataset import BrainInvaders2013
 import numpy as np
 import mne
 """
@@ -24,12 +24,12 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # define the dataset instance
-dataset = bi2013a(NonAdaptive=True, Adaptive=False, Training=True, Online=False)
+dataset = BrainInvaders2013(NonAdaptive=True, Adaptive=False, Training=True, Online=False)
 
 # get the data from subject of interest
 subject = dataset.subject_list[0]
 data = dataset._get_single_subject_data(subject)
-session = 2
+session = 1
 raw = data['session_' + str(session)]['run_3']
 
 # filter data and resample
