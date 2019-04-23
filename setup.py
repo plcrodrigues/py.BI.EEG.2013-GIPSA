@@ -34,7 +34,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name='braininvaders',  # Required
+    name='braininvaders2013',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -77,7 +77,7 @@ setup(
     #
     # This field corresponds to the "Home-Page" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/plcrodrigues/BrainInvaders-2013a-Dataset',  # Optional
+    url='https://github.com/plcrodrigues/py.BI.EEG.2013-GIPSA',  # Optional
 
     # This should be your name or the name of the organization which owns the
     # project.
