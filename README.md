@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 in your command line. 
 
-Then, to ensure that your code finds the right scripts whenever you do `import braininvaders`, you should also do
+Then, to ensure that your code finds the right scripts whenever you do `import braininvaders2013`, you should also do
 
 ```
 python setup.py develop # because no stable release yet

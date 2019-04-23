@@ -3,7 +3,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from pyriemann.classification import MDM
 from pyriemann.estimation import XdawnCovariances
-from braininvaders.dataset import BrainInvaders2013
+from braininvaders2013.dataset import BrainInvaders2013
 import numpy as np
 import mne
 """

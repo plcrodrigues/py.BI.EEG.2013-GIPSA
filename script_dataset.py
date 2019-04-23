@@ -1,7 +1,7 @@
 
 from scipy.io import savemat
 from sklearn.externals import joblib
-from braininvaders.dataset import BrainInvaders2013
+from braininvaders2013.dataset import BrainInvaders2013
 import numpy as np
 import mne
 import pandas as pd

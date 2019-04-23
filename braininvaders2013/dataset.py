@@ -3,7 +3,7 @@
 
 import mne
 import numpy as np
-from braininvaders import download as dl
+from braininvaders2013 import download as dl
 import os
 import glob
 import zipfile
@@ -79,7 +79,7 @@ class BrainInvaders2013():
 
         # check if has the .zip
         url = '{:s}subject{:d}.zip'.format(BI2013a_URL, subject)
-        path_zip = dl.data_path(url, 'BRAININVADERS')
+        path_zip = dl.data_path(url, 'BRAININVADERS2013')
         path_folder = path_zip.strip('subject{:d}.zip'.format(subject))
 
         # check if has to unzip
