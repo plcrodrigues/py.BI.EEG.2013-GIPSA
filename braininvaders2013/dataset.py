@@ -14,7 +14,32 @@ BI2013a_URL = 'https://zenodo.org/record/2645882/files/'
 
 class BrainInvaders2013():
     '''
+    We describe the experimental procedures for a dataset that we have made publicly available at 
+    https://doi.org/10.5281/zenodo.1494163 in mat and csv formats. This dataset contains 
+    electroencephalographic (EEG) recordings of 24 subjects doing a visual P300 Brain-Computer 
+    Interface experiment on PC. The visual P300 is an event-related potential elicited by visual
+    stimulation, peaking 240-600 ms after stimulus onset. The experiment was designed in order to 
+    compare the use of a P300-based brain-computer interface on a PC with and without adaptive 
+    calibration using Riemannian geometry. The brain-computer interface is based on 
+    electroencephalography (EEG). EEG data were recorded thanks to 16 electrodes. A full 
+    description of the experiment is available at https://hal.archives-ouvertes.fr/hal-02103098
+    Data were recorded during an experiment taking place in the GIPSA-lab, Grenoble, France, in
+    2013(Congedo, 2013). Python code for manipulating the data is available at 
+    https://github.com/plcrodrigues/py.BI.EEG.2013-GIPSA. The ID of this dataset is BI.EEG.2013-GIPSA.
 
+    **Full description of the experiment and dataset**
+    https://hal.archives-ouvertes.fr/hal-02103098
+
+    **Link to the data**
+    https://doi.org/10.5281/zenodo.1494163
+ 
+    **Authors**
+    Principal Investigator: B.Sc. Erwan Vaineau, Ph.D. Alexandre Barachant
+    Technical Supervisors: Eng. Anton Andreev, Eng. Pedro. L. C. Rodrigues, Eng. Grégoire Cattan
+    Scientific Supervisor: Ph.D. Marco Congedo
+
+    **ID of the dataset**
+    BI.EEG.2013-GIPSA
     '''
 
     def __init__(self, NonAdaptive=True, Adaptive=False, Training=True, Online=False):
