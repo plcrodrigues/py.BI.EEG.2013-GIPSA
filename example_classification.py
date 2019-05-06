@@ -26,35 +26,43 @@ warnings.filterwarnings("ignore")
 # define the dataset instance
 dataset = BrainInvaders2013(NonAdaptive=True, Adaptive=False, Training=True, Online=False)
 
+scores = {}
+
 # get the data from subject of interest
-subject = dataset.subject_list[0]
-data = dataset._get_single_subject_data(subject)
-session = 1
-raw = data['session_' + str(session)]['run_3']
+for subject in dataset.subject_list:
+	
+	scores['subject_' + str(subject).zfill(2)] = {}
 
-# filter data and resample
-fmin = 1
-fmax = 24
-raw.filter(fmin, fmax, verbose=False)
-raw.resample(sfreq=128, verbose=False)
+	data = dataset._get_single_subject_data(subject)
 
-# detect the events and cut the signal into epochs
-events = mne.find_events(raw=raw, shortest_event=1, verbose=False)
-event_id = {'NonTarget': 33286, 'Target': 33285}
-epochs = mne.Epochs(raw, events, event_id, tmin=0.0, tmax=1.0, baseline=None, verbose=False)
+	for session in data.keys():			
 
-# get trials and labels
-X = epochs.get_data()
-y = events[:, -1]
-y[y == 33286] = 0
-y[y == 33285] = 1
+		raw = data[session]['run_3']
 
-# cross validation
-skf = StratifiedKFold(n_splits=5)
-clf = make_pipeline(XdawnCovariances(estimator='lwf', classes=[1]), MDM())
-scr = cross_val_score(clf, X, y, cv=skf, scoring='roc_auc')
+		# filter data and resample
+		fmin = 1
+		fmax = 24
+		raw.filter(fmin, fmax, verbose=False)
 
-# print results of classification
-print('subject', subject, 'session', session)
-print('mean AUC :', scr.mean())
+		# detect the events and cut the signal into epochs
+		events = mne.find_events(raw=raw, shortest_event=1, verbose=False)
+		event_id = {'NonTarget': 33286, 'Target': 33285}
+		epochs = mne.Epochs(raw, events, event_id, tmin=0.0, tmax=1.0, baseline=None, verbose=False, preload=True)
+		epochs.pick_types(eeg=True)
 
+		# get trials and labels
+		X = epochs.get_data()
+		y = events[:, -1]
+		y[y == 33286] = 0
+		y[y == 33285] = 1
+
+		# cross validation
+		skf = StratifiedKFold(n_splits=5)
+		clf = make_pipeline(XdawnCovariances(estimator='lwf', classes=[1]), MDM())
+		scr = cross_val_score(clf, X, y, cv=skf, scoring='roc_auc')
+
+		# print results of classification
+		scores['subject_' + str(subject).zfill(2)][session] = scr.mean()
+
+		print('subject', subject, session)
+		print(scr.mean())

@@ -9,8 +9,10 @@ import glob
 import zipfile
 import yaml
 from scipy.io import loadmat
+from distutils.dir_util import copy_tree
+import shutil
 
-BI2013a_URL = 'https://zenodo.org/record/2645882/files/'
+BI2013a_URL = 'https://zenodo.org/record/2669187/files/'
 
 class BrainInvaders2013():
     '''
@@ -102,21 +104,33 @@ class BrainInvaders2013():
         if subject not in self.subject_list:
             raise(ValueError("Invalid subject number"))
 
-        # check if has the .zip
-        url = '{:s}subject{:d}.zip'.format(BI2013a_URL, subject)
-        path_zip = dl.data_path(url, 'BRAININVADERS2013')
-        path_folder = path_zip.strip('subject{:d}.zip'.format(subject))
+        if subject in [1, 2, 3, 4, 5, 6, 7]:
+            zipname_list = ['subject' + str(subject).zfill(2) + '_session' + str(i).zfill(2) + '.zip' for i in range(1, 8+1)]
+        else:
+            zipname_list = ['subject' + str(subject).zfill(2) + '.zip'] 
 
-        # check if has to unzip
-        if not(os.path.isdir(path_folder + 'subject{:d}/'.format(subject))):
-            print('unzip', path_zip)
-            zip_ref = zipfile.ZipFile(path_zip, "r")
-            zip_ref.extractall(path_folder)
+        for i, zipname in enumerate(zipname_list):
+
+            url = BI2013a_URL + zipname
+            path_zip = dl.data_path(url, 'BRAININVADERS2013')
+            path_folder = path_zip.strip(zipname)
+
+            # check if has the directory for the subject
+            directory = path_folder + 'subject_' + str(subject).zfill(2) + os.sep
+            if not(os.path.isdir(directory)):
+                os.makedirs(directory)  
+
+            if not(os.path.isdir(directory + 'Session' + str(i+1))):
+                print('unzip', path_zip)
+                zip_ref = zipfile.ZipFile(path_zip, "r")
+                zip_ref.extractall(path_folder)
+                os.makedirs(directory + 'Session' + str(i+1))
+                copy_tree(path_zip.strip('.zip'), directory)
+                shutil.rmtree(path_zip.strip('.zip'))
 
         # filter the data regarding the experimental conditions
-        meta_file = 'subject{:d}/meta.yml'.format(subject)
-        meta_path = path_folder + meta_file
-        with open(meta_path, 'r') as stream:
+        meta_file = directory + os.sep + 'meta.yml'
+        with open(meta_file, 'r') as stream:
             meta = yaml.load(stream)
         conditions = []
         if self.adaptive:
@@ -139,6 +153,6 @@ class BrainInvaders2013():
         subject_paths = []
         for filename in filenames:
             subject_paths = subject_paths + \
-                glob.glob(path_folder + 'subject{:d}/Session*/'.format(subject) + filename.replace('.gdf','.mat')) # noqa
+                glob.glob(directory + os.sep + 'Session*'.format(subject) + os.sep + filename.replace('.gdf','.mat')) 
 
         return subject_paths
