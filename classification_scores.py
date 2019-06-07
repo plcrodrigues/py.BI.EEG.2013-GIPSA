@@ -4,6 +4,7 @@ from sklearn.model_selection import StratifiedKFold, cross_val_score
 from pyriemann.classification import MDM
 from pyriemann.estimation import XdawnCovariances
 from braininvaders2013.dataset import BrainInvaders2013
+from sklearn.externals import joblib
 import numpy as np
 import mne
 """
@@ -31,7 +32,7 @@ scores = {}
 # get the data from subject of interest
 for subject in dataset.subject_list:
 	
-	scores['subject_' + str(subject).zfill(2)] = {}
+	scores[subject] = {}
 
 	data = dataset._get_single_subject_data(subject)
 
@@ -62,7 +63,10 @@ for subject in dataset.subject_list:
 		scr = cross_val_score(clf, X, y, cv=skf, scoring='roc_auc')
 
 		# print results of classification
-		scores['subject_' + str(subject).zfill(2)][session] = scr.mean()
+		scores[subject][session] = scr.mean()
 
 		print('subject', subject, session)
 		print(scr.mean())
+
+filename = './classification_scores.pkl'		
+joblib.dump(scores, filename)
