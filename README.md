@@ -1,6 +1,6 @@
 # Brain Invaders 2013 Dataset
 
-Repository with basic scripts for using the Brain Invaders 2013a dataset developed at GIPSA-lab. The dataset files and their documentation are all available at 
+Repository with basic scripts for using the Brain Invaders 2013 dataset developed at GIPSA-lab. The dataset files and their documentation are all available at 
 
 [https://zenodo.org/record/2669187](https://zenodo.org/record/2669187)
 
