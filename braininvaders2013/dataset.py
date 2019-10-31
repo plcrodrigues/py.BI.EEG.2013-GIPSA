@@ -7,10 +7,10 @@ from braininvaders2013 import download as dl
 import os
 import glob
 import zipfile
-import yaml
 from scipy.io import loadmat
 from distutils.dir_util import copy_tree
 import shutil
+import yaml
 
 BI2013a_URL = 'https://zenodo.org/record/2669187/files/'
 
