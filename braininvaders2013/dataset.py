@@ -3,7 +3,7 @@
 
 import mne
 import numpy as np
-from braininvaders2013 import download as dl
+from . import download as dl
 import os
 import glob
 import zipfile
